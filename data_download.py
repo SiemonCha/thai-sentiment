@@ -2,18 +2,25 @@ from datasets import load_dataset
 import os
 
 def download_thai_sentiment():
-    # Thai sentiment from social media (wisesight)
     dataset = load_dataset("wisesight_sentiment")
     
+    train_data = dataset['train'].filter(lambda x: x['category'] != 3)
+    test_data = dataset['test'].filter(lambda x: x['category'] != 3)
+
+    
     os.makedirs("./data", exist_ok=True)
-    dataset.save_to_disk("./data/wisesight")
     
-    print(f"Train: {len(dataset['train'])}")
-    print(f"Test: {len(dataset['test'])}")
+    from datasets import DatasetDict
+    dataset_clean = DatasetDict({
+        'train': train_data,
+        'test': test_data
+    })
     
-    # Check actual column names
-    print(f"Columns: {dataset['train'].column_names}")
-    print(f"First sample: {dataset['train'][0]}")
+    dataset_clean.save_to_disk("./data/wisesight")
+    
+    print(f"Train: {len(train_data)}")
+    print(f"Test: {len(test_data)}")
+    print(f"Label distribution: pos/neu/neg only")
     
 if __name__ == "__main__":
     download_thai_sentiment()

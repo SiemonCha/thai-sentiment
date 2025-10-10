@@ -4,8 +4,8 @@ import torch
 model = AutoModelForSequenceClassification.from_pretrained("./model")
 tokenizer = AutoTokenizer.from_pretrained("./model")
 
-LABELS = {0: "positive", 1: "neutral", 2: "negative", 3: "question"}
-EMOJI = {0: "😊", 1: "😐", 2: "😞", 3: "❓"}
+LABELS = {0: "positive", 1: "neutral", 2: "negative"}
+EMOJI = {0: "😊", 1: "😐", 2: "😞"}
 
 def predict(text):
     inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128)

@@ -35,13 +35,13 @@ preds = np.array(all_preds)
 labels = np.array(all_labels)
 
 # Detailed metrics
-LABEL_NAMES = ['positive', 'neutral', 'negative', 'question']
+LABEL_NAMES = ['positive', 'neutral', 'negative']
 print("\n>>>Test Set Performance:\n")
 print(classification_report(labels, preds, target_names=LABEL_NAMES, digits=3))
 
 print("\n>>>Confusion Matrix:")
 cm = confusion_matrix(labels, preds)
-print("          pos  neu  neg  que")
+print("pos  neu  neg")
 for i, name in enumerate(LABEL_NAMES):
     print(f"{name:8s}: {cm[i]}")
 

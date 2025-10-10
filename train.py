@@ -8,6 +8,7 @@ from transformers import (
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 import torch
+from torch import nn
 
 # Load data
 dataset = load_from_disk("./data/wisesight")
@@ -33,10 +34,10 @@ test_data = test_data.rename_column('category', 'labels')
 train_data.set_format('torch', columns=['input_ids', 'attention_mask', 'labels'])
 test_data.set_format('torch', columns=['input_ids', 'attention_mask', 'labels'])
 
-# Load model (4 classes)
+# Load model (3 classes now)
 model = AutoModelForSequenceClassification.from_pretrained(
     "clicknext/phayathaibert",
-    num_labels=4
+    num_labels=3  # Changed from 4
 )
 
 # Metrics
@@ -62,21 +63,40 @@ print(f"Using device config: {device_config}")
 # Training config
 training_args = TrainingArguments(
     output_dir='./results',
-    num_train_epochs=3,
+    num_train_epochs=5,  # More epochs
     per_device_train_batch_size=16,
     per_device_eval_batch_size=32,
-    learning_rate=2e-5,
+    learning_rate=3e-5,  # Slightly higher
     weight_decay=0.01,
+    warmup_steps=500,  # Add warmup
     eval_strategy="epoch",
     save_strategy="epoch",
     load_best_model_at_end=True,
     metric_for_best_model="f1",
     logging_steps=100,
-    **device_config,  # Auto-apply fp16/bf16 based on hardware
+    **device_config,
 )
 
-# Trainer
-trainer = Trainer(
+class_counts = [3866, 11795, 5491]  # pos, neu, neg
+total = sum(class_counts)
+weights = [total/(len(class_counts)*count) for count in class_counts]
+class_weights = torch.tensor(weights)
+
+print(f"Class weights: pos={weights[0]:.2f}, neu={weights[1]:.2f}, neg={weights[2]:.2f}")
+
+
+# Custom Trainer with weighted loss
+class WeightedTrainer(Trainer):
+    def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
+        labels = inputs.pop("labels")
+        outputs = model(**inputs)
+        logits = outputs.logits
+        loss_fct = nn.CrossEntropyLoss(weight=class_weights.to(model.device))
+        loss = loss_fct(logits, labels)
+        return (loss, outputs) if return_outputs else loss
+
+# Use WeightedTrainer instead of Trainer
+trainer = WeightedTrainer(
     model=model,
     args=training_args,
     train_dataset=train_data,

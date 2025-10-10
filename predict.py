@@ -6,7 +6,7 @@ model = AutoModelForSequenceClassification.from_pretrained("./model")
 tokenizer = AutoTokenizer.from_pretrained("./model")
 
 # Label mapping
-LABELS = {0: "positive", 1: "neutral", 2: "negative", 3: "question"}
+LABELS = {0: "positive", 1: "neutral", 2: "negative"}
 
 def predict_sentiment(text):
     """Predict sentiment of Thai text"""
