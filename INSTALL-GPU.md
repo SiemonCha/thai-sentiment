@@ -3,11 +3,12 @@
 This document explains how to install PyTorch (torch) and the project's Python dependencies so the project runs on NVIDIA (CUDA) and AMD (ROCm) GPUs, and across Linux, macOS, and Windows.
 
 Principles
+
 - The `requirements.txt` file contains the stable, pinned requirements for the project excluding `torch`. This maximizes cross-platform pip installability for the rest of the stack.
 - Install `torch` separately using the vendor-appropriate wheels/command (PyTorch provides platform-specific wheels for CUDA and ROCm). Installing `torch` incorrectly is the most common source of cross-platform failures.
 - Prefer conda/mamba for heavy binary packages (`pyarrow`, `torch`, etc.) on macOS and Windows; pip is fine for many Linux setups but may require build tools.
 
-1) Prepare environment (example, Linux/macOS zsh)
+1. Prepare environment (example, Linux/macOS zsh)
 
 ```bash
 # create a venv (or use conda if preferred)
@@ -16,9 +17,10 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 ```
 
-2) Install `torch` (pick the correct option)
+2. Install `torch` (pick the correct option)
 
 - NVIDIA (CUDA) — Linux or Windows with supported CUDA driver
+
   - Go to https://pytorch.org/get-started/locally/ and select your OS, package (pip/conda), language (Python), and CUDA version. Follow the exact command shown.
   - Example (pip, CPU-only):
     ```bash
@@ -30,6 +32,7 @@ python -m pip install --upgrade pip
     ```
 
 - AMD (ROCm) — Linux with ROCm support
+
   - PyTorch provides ROCm builds for supported ROCm versions. Use the official ROCm install command from https://pytorch.org. Example pattern (adjust ROCm version):
     ```bash
     pip install --index-url https://download.pytorch.org/whl/rocm5.6 torch
@@ -44,7 +47,7 @@ python -m pip install --upgrade pip
     conda install pytorch -c pytorch
     ```
 
-3) Install the rest of dependencies
+3. Install the rest of dependencies
 
 After `torch` is installed, install the rest using the requirements file:
 
@@ -52,13 +55,14 @@ After `torch` is installed, install the rest using the requirements file:
 pip install -r requirements.txt
 ```
 
-4) If any package fails to build
+4. If any package fails to build
+
 - Install system build tools (Linux): `build-essential`, `python3-dev`, `cmake`.
 - macOS: install Xcode CLT: `xcode-select --install`.
 - Windows: install Visual Studio Build Tools (C++) and use conda where possible.
 - If `tokenizers` fails to build, install Rust via `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`.
 
-5) Verify installation
+5. Verify installation
 
 Run this quick check:
 
@@ -76,5 +80,6 @@ PY
 ```
 
 Notes and caveats
+
 - Exact `torch` wheel URLs and options change frequently. Always prefer the official PyTorch selector (https://pytorch.org/get-started/locally/) to get the right command for your OS, CUDA/ROCm version, and package manager.
 - If you need a single-file reproducible environment for CI or other users, consider providing a `environment.yml` (conda) with `torch` channel entries for each platform variant, or separate `environment-linux-cuda.yml` / `environment-linux-rocm.yml` files.
