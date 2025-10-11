@@ -35,7 +35,7 @@ python -m pip install --upgrade pip
 
   - PyTorch provides ROCm builds for supported ROCm versions. Use the official ROCm install command from https://pytorch.org. Example pattern (adjust ROCm version):
     ```bash
-    pip install --index-url https://download.pytorch.org/whl/rocm5.6 torch
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.2
     ```
   - Note: ROCm is only supported on certain AMD GPUs and Linux distributions.
 
@@ -68,14 +68,14 @@ Run this quick check:
 
 ```bash
 python - <<'PY'
-import sys
-print('Python', sys.version)
-for pkg in ('torch','transformers','datasets','pyarrow','tokenizers'):
-    try:
-        m = __import__(pkg)
-        print(pkg, 'version', getattr(m, '__version__', 'unknown'))
-    except Exception as e:
-        print(pkg, 'import failed:', e)
+import torch
+print(f"PyTorch: {torch.__version__}")
+print(f"CUDA available: {torch.cuda.is_available()}")
+if torch.cuda.is_available():
+    print(f"GPU: {torch.cuda.get_device_name(0)}")
+    print(f"GPU count: {torch.cuda.device_count()}")
+else:
+    print("❌ GPU NOT DETECTED - still using CPU")
 PY
 ```
 

@@ -18,11 +18,20 @@ def predict_sentiment(text):
         pred_label = torch.argmax(probs, dim=-1).item()
         confidence = probs[0][pred_label].item()
     
+    # Determine number of classes from model output
+    num_classes = outputs.logits.shape[-1]
+
+    # Build all_scores safely: if LABELS is missing an index, fall back to 'label_{i}'
+    all_scores = {}
+    for i in range(num_classes):
+        label_name = LABELS.get(i, f"label_{i}")
+        all_scores[label_name] = f"{probs[0][i].item():.2%}"
+
     return {
         "text": text,
-        "sentiment": LABELS[pred_label],
+        "sentiment": LABELS.get(pred_label, f"label_{pred_label}"),
         "confidence": f"{confidence:.2%}",
-        "all_scores": {LABELS[i]: f"{probs[0][i].item():.2%}" for i in range(4)}
+        "all_scores": all_scores
     }
 
 if __name__ == "__main__":
