@@ -2,8 +2,13 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
 # Load trained model
-model = AutoModelForSequenceClassification.from_pretrained("./model")
-tokenizer = AutoTokenizer.from_pretrained("./model")
+try:
+    model = AutoModelForSequenceClassification.from_pretrained("SiemonCha/thai-sentiment-phayabert")
+    tokenizer = AutoTokenizer.from_pretrained("SiemonCha/thai-sentiment-phayabert")
+except:
+    print("⚠️  Loading from local ./model/ (no internet)")
+    model = AutoModelForSequenceClassification.from_pretrained("./model")
+    tokenizer = AutoTokenizer.from_pretrained("./model")
 
 # Label mapping
 LABELS = {0: "positive", 1: "neutral", 2: "negative"}

@@ -9,6 +9,7 @@ import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 import torch
 from torch import nn
+import matplotlib.pyplot as plt
 
 # Load data
 dataset = load_from_disk("./data/wisesight")
@@ -50,13 +51,16 @@ def compute_metrics(pred):
 
 # Auto-detect hardware capabilities
 def get_device_config():
+    # Use fp16 for CUDA, but do NOT enable bf16 for MPS by default (may not be supported/
+    # cause Trainer/accelerate issues). Use CPU fallback otherwise.
     if torch.cuda.is_available():
-        return {"fp16": True}  # NVIDIA GPU
-    elif torch.backends.mps.is_available():
-        return {"bf16": True}  # Mac M1/M2
+        return {"fp16": True}
     else:
-        return {}  # CPU only
+        return {}
     
+device_config = get_device_config()
+print(f"Using device config: {device_config}")
+
 device_config = get_device_config()
 print(f"Using device config: {device_config}")
 
@@ -107,6 +111,39 @@ trainer = WeightedTrainer(
 # Train
 print(">>> Starting training...")
 trainer.train()
+
+
+# Plot training history
+history = trainer.state.log_history
+train_loss = [x['loss'] for x in history if 'loss' in x]
+eval_loss = [x['eval_loss'] for x in history if 'eval_loss' in x]
+eval_acc = [x['eval_accuracy'] for x in history if 'eval_accuracy' in x]
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+# Loss plot
+if train_loss:
+    ax1.plot(train_loss, label='Train Loss')
+if eval_loss:
+    # align validation loss points to training-step x-axis
+    import numpy as np
+    eval_x = np.linspace(0, max(len(train_loss)-1, 0), num=len(eval_loss))
+    ax1.plot(eval_x, eval_loss, label='Val Loss', marker='o')
+ax1.set_xlabel('Steps')
+ax1.set_ylabel('Loss')
+ax1.legend()
+ax1.set_title('Training Loss')
+
+# Accuracy plot
+if eval_acc:
+    ax2.plot(eval_acc, marker='o')
+ax2.set_xlabel('Epoch')
+ax2.set_ylabel('Accuracy')
+ax2.set_title('Validation Accuracy')
+
+plt.tight_layout()
+plt.savefig('training_history.png', dpi=150)
+print(">>> Saved training_history.png")
 
 # Save
 model.save_pretrained("./model")
