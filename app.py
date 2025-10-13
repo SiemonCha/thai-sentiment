@@ -6,7 +6,7 @@ try:
     model = AutoModelForSequenceClassification.from_pretrained("SiemonCha/thai-sentiment-phayabert")
     tokenizer = AutoTokenizer.from_pretrained("SiemonCha/thai-sentiment-phayabert")
 except:
-    print("⚠️  Loading from local ./model/ (no internet)")
+    print(">>>  Loading from local ./model/ (no internet)")
     model = AutoModelForSequenceClassification.from_pretrained("./model")
     tokenizer = AutoTokenizer.from_pretrained("./model")
 

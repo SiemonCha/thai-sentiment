@@ -1,32 +1,133 @@
 # Python
-venv/
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
 .Python
-*.so
-*.egg-info/
 
-# Model & Data (DO NOT PUSH)
-model/
-data/
-results/
-*.pth
-*.bin
-*.safetensors
+# macOS
+.DS_Store
 
-# IDE
+# Editor / IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
-# OS
-.DS_Store
-Thumbs.db
+# Build / packaging
+build/
+dist/
+*.egg-info/
 
-# Logs
+# Jupyter
+.ipynb_checkpoints/
+
+# Testing
+.pytest_cache/
+
+# Logs / outputs / temp
+logs/
 *.log
-wandb/
+tmp/
+*.tmp
+*.bak
+
+# Dataset, models, and checkpoints (usually large — remove if you want to commit them)
+data/
+model/
+results/
+training_history.png
+confusion_matrix.png
+output.csv
+*.pt
+pytorch_model.bin
+*.safetensors
+
+# Hugging Face / cache
+.cache/
+huggingface/
+transformers_cache/
+hf_cache/
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Misc
+*.sqlite3
+*.db
+coverage.*
+coverage-report/
+
+# If you intentionally want to version models or data, remove the relevant lines above.
+```// filepath: /Users/siemoncha/Desktop/CS/thai-sentiment/.gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.Python
+
+# macOS
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Testing
+.pytest_cache/
+
+# Logs / outputs / temp
+logs/
+*.log
+tmp/
+*.tmp
+*.bak
+
+# Dataset, models, and checkpoints (usually large — remove if you want to commit them)
+data/
+model/
+results/
+training_history.png
+confusion_matrix.png
+output.csv
+*.pt
+pytorch_model.bin
+*.safetensors
+
+# Hugging Face / cache
+.cache/
+huggingface/
+transformers_cache/
+hf_cache/
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Misc
+*.sqlite3
+*.db
+coverage.*
+coverage-report/

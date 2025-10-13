@@ -1,0 +1,2 @@
+Thai Text,Sentiment Prediction,timestamp
+ราคาแพงไป คุณภาพไม่คุ้ม,"{""label"": ""Negative \ud83d\ude1e"", ""confidences"": [{""label"": ""Negative \ud83d\ude1e"", ""confidence"": 0.9993523955345154}, {""label"": ""Neutral \ud83d\ude10"", ""confidence"": 0.0003582325007300824}, {""label"": ""Positive \ud83d\ude0a"", ""confidence"": 0.00028940499760210514}]}",2025-10-13 13:16:56.592232
