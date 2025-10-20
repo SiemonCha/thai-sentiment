@@ -3,22 +3,6 @@ import os
 import argparse
 import subprocess
 
-dataset = load_dataset("wisesight_sentiment")
-
-# Normalize text column name to 'texts' (other code expects 'texts')
-# try common column names and rename to 'texts' if needed
-sample_cols = dataset['train'].column_names
-if 'texts' not in sample_cols:
-    if 'text' in sample_cols:
-            dataset = dataset.map(lambda ex: {'texts': ex['text']})
-    elif 'sentence' in sample_cols:
-            dataset = dataset.map(lambda ex: {'texts': ex['sentence']})
-    else:
-        raise RuntimeError(f"No known text column found in dataset. Columns: {sample_cols}")
-
-train_data = dataset['train'].filter(lambda x: x['category'] != 3)
-test_data = dataset['test'].filter(lambda x: x['category'] != 3)
-
 
 def download_thai_sentiment(explore=False):
     dataset = load_dataset("wisesight_sentiment")

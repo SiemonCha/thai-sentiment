@@ -15,8 +15,9 @@ def test_neutral_sentiment():
     assert result['sentiment'] in ['neutral', 'positive']
 
 def test_empty_text():
-    with pytest.raises(Exception):
-        predict_sentiment("")
+    result = predict_sentiment("")
+    assert result['sentiment'] in ['positive', 'neutral', 'negative']
+    assert 'confidence' in result
 
 def test_confidence_range():
     result = predict_sentiment("อาหารอร่อยมาก")

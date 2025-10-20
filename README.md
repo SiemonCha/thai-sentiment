@@ -1,94 +1,201 @@
-# Thai Sentiment Analysis with PhayaThaiBERT
+# 🇹🇭 Thai Sentiment Analysis with PhayaThaiBERT
 
-This repository contains code to train and run a Thai sentiment classifier built on PhayaThaiBERT.
+Production-ready Thai sentiment classifier with 82% accuracy. Fine-tuned PhayaThaiBERT on 21k social media messages.
 
-- Setup (Python environment and dependencies)
-- Download dataset
-- Train the model
-- Evaluate on test data
-- Run predictions (scripted and interactive demo)
+[![Open in Spaces](https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-sm-dark.svg)](https://huggingface.co/spaces/SiemonCha/thai-sentiment-demo)
+[![Model](https://img.shields.io/badge/🤗-Model-yellow)](https://huggingface.co/SiemonCha/thai-sentiment-phayabert)
 
-Prerequisites
+## ⚡ Quick Demo
 
-- Python 3.11+ (the project venv shows Python 3.12 but 3.11+ should work)
-- pip and/or conda (conda recommended for heavy binary packages)
-- Optional GPU drivers for NVIDIA (CUDA) or AMD (ROCm) if you want to train faster
+Try it now: **[Live Demo](https://huggingface.co/spaces/SiemonCha/thai-sentiment-demo)**
 
-Files overview (in execution order)
-
-- `requirements.txt` — pip installable requirements (note: `torch` is installed separately)
-- `INSTALL-GPU.md` — platform-specific instructions for installing `torch`/GPU support
-- `data_download.py` — download and prepare the Wisesight dataset (saves to `./data/wisesight`)
-- `train.py` — tokenizes, trains a sequence classification model and saves `./model`
-- `evaluate.py` — evaluates the saved `./model` on the test split
-- `predict.py` — batch/personal predictions using `./model` (example main included)
-- `demo.py` — interactive CLI for quick manual testing
-
-Quick start (CPU-only)
-
-1. Create a virtual env and activate it (recommended):
+Or run locally:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
+pip install transformers torch gradio
+python app.py
 ```
 
-2. Install the pip requirements (note: `torch` is NOT installed here):
+## 🎯 Features
+
+- **Multiple Interfaces:** CLI, Web UI, REST API
+- **Production Ready:** Docker, FastAPI, HuggingFace hosting
+- **High Performance:** 82% accuracy, ONNX optimization
+- **Explainable:** LIME interpretability
+- **Well Tested:** Unit tests, CI/CD
+- **Hardware Agnostic:** GPU/Mac/CPU support
+
+## 📊 Performance
+
+| Metric           | Score |
+| ---------------- | ----- |
+| Overall Accuracy | 82%   |
+| Positive F1      | 0.72  |
+| Neutral F1       | 0.85  |
+| Negative F1      | 0.85  |
+
+## 🚀 Quick Start
+
+### Use Pre-trained Model (No Training)
+
+```python
+from transformers import pipeline
+
+classifier = pipeline("sentiment-analysis",
+                     model="SiemonCha/thai-sentiment-phayabert")
+
+result = classifier("อาหารอร่อยมาก")
+print(result)
+# [{'label': 'POSITIVE', 'score': 0.98}]
+```
+
+### Run Web UI
 
 ```bash
+git clone https://github.com/SiemonCha/thai-sentiment
+cd thai-sentiment
 pip install -r requirements.txt
+python app.py
 ```
 
-3. (Optional) Install `torch` now if you have a supported GPU or want CPU-only PyTorch. See `INSTALL-GPU.md` for platform-specific commands.
-
-Download dataset
+### REST API
 
 ```bash
+python api.py
+# API docs: http://localhost:8000/docs
+```
+
+```bash
+curl -X POST "http://localhost:8000/predict" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "อาหารอร่อยมาก"}'
+```
+
+### Docker
+
+```bash
+docker build -t thai-sentiment .
+docker run -p 7860:7860 thai-sentiment
+```
+
+## 🔬 Training from Scratch
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Download dataset
 python data_download.py
-```
 
-This saves a cleaned dataset at `./data/wisesight` with `train` and `test` splits.
-
-Train
-
-Basic training (this script uses `clicknext/phayathaibert` as base and trains 3-class labels):
-
-```bash
+# 3. Train model (~40 min Mac M1 / ~15 min GPU)
 python train.py
-```
 
-Notes:
-
-- Training detects hardware and will enable FP16 on CUDA-enabled NVIDIA GPUs or bfloat16 on Apple MPS when available.
-- Training saves the final model and tokenizer to `./model`.
-
-Evaluate
-
-After training (or if you already have `./model`), run evaluation:
-
-```bash
+# 4. Evaluate
 python evaluate.py
 ```
 
-This will load `./data/wisesight/test` and `./model`, run predictions over the test set, and print classification metrics and the confusion matrix.
+## 📁 Project Structure
 
-Predict (scripted)
-
-Use `predict.py` to run example predictions or integrate the `predict_sentiment` function into other scripts. Example:
-
-```bash
-python predict.py
+```
+thai-sentiment/
+├── app.py                 # Gradio web UI
+├── api.py                 # FastAPI REST API
+├── demo.py                # Interactive CLI
+├── predict.py             # Batch predictions
+├── train.py               # Training script
+├── evaluate.py            # Evaluation with metrics
+├── explain.py             # LIME explainability
+├── optimize.py            # ONNX conversion
+├── benchmark.py           # Model comparison
+├── test_model.py          # Unit tests
+├── Dockerfile             # Container
+└── requirements.txt       # Dependencies
 ```
 
-Predict (interactive)
+## 🖥️ Hardware Support
+
+| Platform          | Training Time | Status          |
+| ----------------- | ------------- | --------------- |
+| Mac M1/M2         | ~40 min       | ✅ Tested       |
+| NVIDIA GPU        | ~15 min       | ✅ Tested       |
+| AMD GPU (Linux)   | ~15 min       | ✅ Tested       |
+| CPU               | ~4-5 hours    | ✅ Works        |
+| AMD GPU (Windows) | ~4-5 hours    | ⚠️ CPU fallback |
+
+## 🧪 Testing
 
 ```bash
-python demo.py
+# Run tests
+pytest test_model.py -v
+
+# Benchmark
+python benchmark.py
+
+# Explain predictions
+python explain.py
 ```
 
-This runs a simple command-line REPL where you can type Thai sentences and get sentiment + confidence.
+## 📈 Advanced Features
 
-Installing `torch` (GPU/CPU) — important
+### Model Explainability
 
-PyTorch (`torch`) is intentionally NOT pinned in `requirements.txt`. This avoids cross-platform wheel and GPU mismatches. Please install `torch` separately according to your OS/GPU using the instructions in `INSTALL-GPU.md`.
+```bash
+python explain.py
+# Generates explanation.html showing word contributions
+```
+
+### ONNX Optimization (3x faster)
+
+```bash
+python optimize.py
+# Creates optimized model in ./model_onnx/
+```
+
+### Batch Processing
+
+```bash
+python batch_predict.py
+# Processes input.csv → output.csv
+```
+
+## 🔧 Technical Details
+
+- **Base Model:** PhayaThaiBERT (110M parameters)
+- **Dataset:** Wisesight Sentiment (21k messages)
+- **Training:** 5 epochs, class-weighted loss, AdamW
+- **Architecture:** BERT with classification head
+- **Max Length:** 128 tokens
+- **Classes:** Positive, Neutral, Negative
+
+## 📝 Citation
+
+```bibtex
+@misc{thai-sentiment-2025,
+  author = {SiemonCha},
+  title = {Thai Sentiment Analysis with PhayaThaiBERT},
+  year = {2025},
+  publisher = {GitHub},
+  url = {https://github.com/SiemonCha/thai-sentiment}
+}
+```
+
+Dataset:
+
+```bibtex
+@software{wisesight_sentiment,
+  author = {Suriyawongkul, Arthit and Chuangsuwanich, Ekapol},
+  title = {PyThaiNLP/wisesight-sentiment},
+  year = 2019,
+  doi = {10.5281/zenodo.3457447}
+}
+```
+
+## 📄 License
+
+MIT License
+
+## 🔗 Links
+
+- **Live Demo:** https://huggingface.co/spaces/SiemonCha/thai-sentiment-demo
+- **Model Hub:** https://huggingface.co/SiemonCha/thai-sentiment-phayabert
+- **GitHub:** https://github.com/SiemonCha/thai-sentiment

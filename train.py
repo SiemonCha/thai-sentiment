@@ -61,9 +61,6 @@ def get_device_config():
 device_config = get_device_config()
 print(f"Using device config: {device_config}")
 
-device_config = get_device_config()
-print(f"Using device config: {device_config}")
-
 # Training config
 training_args = TrainingArguments(
     output_dir='./results',
