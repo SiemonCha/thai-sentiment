@@ -2,13 +2,19 @@ import gradio as gr
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 
+# Load trained model
 try:
+    # Try loading from HuggingFace first
     model = AutoModelForSequenceClassification.from_pretrained("SiemonCha/thai-sentiment-phayabert")
     tokenizer = AutoTokenizer.from_pretrained("SiemonCha/thai-sentiment-phayabert")
-except:
-    print(">>>  Loading from local ./model/ (no internet)")
+    print(">>> Loaded model from HuggingFace")
+except Exception as e:
+    # Fallback to local model
+    print(f">>>  Could not load from HuggingFace: {e}")
+    print("Loading from local ./model/")
     model = AutoModelForSequenceClassification.from_pretrained("./model")
     tokenizer = AutoTokenizer.from_pretrained("./model")
+    
 
 LABELS = {0: "Positive 😊", 1: "Neutral 😐", 2: "Negative 😞"}
 
