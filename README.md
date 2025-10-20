@@ -1,11 +1,11 @@
-# 🇹🇭 Thai Sentiment Analysis with PhayaThaiBERT
+# Thai Sentiment Analysis with PhayaThaiBERT
 
 Production-ready Thai sentiment classifier with 82% accuracy. Fine-tuned PhayaThaiBERT on 21k social media messages.
 
 [![Open in Spaces](https://huggingface.co/datasets/huggingface/badges/resolve/main/open-in-hf-spaces-sm-dark.svg)](https://huggingface.co/spaces/SiemonCha/thai-sentiment-demo)
 [![Model](https://img.shields.io/badge/🤗-Model-yellow)](https://huggingface.co/SiemonCha/thai-sentiment-phayabert)
 
-## ⚡ Quick Demo
+## Quick Demo
 
 Try it now: **[Live Demo](https://huggingface.co/spaces/SiemonCha/thai-sentiment-demo)**
 
@@ -16,7 +16,7 @@ pip install transformers torch gradio
 python app.py
 ```
 
-## 🎯 Features
+## Features
 
 - **Multiple Interfaces:** CLI, Web UI, REST API
 - **Production Ready:** Docker, FastAPI, HuggingFace hosting
@@ -25,7 +25,7 @@ python app.py
 - **Well Tested:** Unit tests, CI/CD
 - **Hardware Agnostic:** GPU/Mac/CPU support
 
-## 📊 Performance
+## Performance
 
 | Metric           | Score |
 | ---------------- | ----- |
@@ -34,7 +34,7 @@ python app.py
 | Neutral F1       | 0.85  |
 | Negative F1      | 0.85  |
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Use Pre-trained Model (No Training)
 
@@ -78,7 +78,7 @@ docker build -t thai-sentiment .
 docker run -p 7860:7860 thai-sentiment
 ```
 
-## 🔬 Training from Scratch
+## Training from Scratch
 
 ```bash
 # 1. Install dependencies
@@ -94,7 +94,7 @@ python train.py
 python evaluate.py
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 thai-sentiment/
@@ -112,21 +112,22 @@ thai-sentiment/
 └── requirements.txt       # Dependencies
 ```
 
-## 🖥️ Hardware Support
+## Hardware Support
 
 | Platform          | Training Time | Status          |
 | ----------------- | ------------- | --------------- |
-| Mac M1/M2         | ~40 min       | ✅ Tested       |
-| NVIDIA GPU        | ~15 min       | ✅ Tested       |
-| AMD GPU (Linux)   | ~15 min       | ✅ Tested       |
-| CPU               | ~4-5 hours    | ✅ Works        |
-| AMD GPU (Windows) | ~4-5 hours    | ⚠️ CPU fallback |
+| Mac M1/M2         | ~40 min       | >> Tested       |
+| NVIDIA GPU        | ~15 min       | >> Tested       |
+| AMD GPU (Linux)   | ~15 min       | >> Tested       |
+| CPU               | ~4-5 hours    | >> Works        |
+| AMD GPU (Windows) | ~4-5 hours    | XX CPU fallback |
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run tests
 pytest test_model.py -v
+pytest test_model.py test_model_advanced.py -v
 
 # Benchmark
 python benchmark.py
@@ -135,7 +136,7 @@ python benchmark.py
 python explain.py
 ```
 
-## 📈 Advanced Features
+## Advanced Features
 
 ### Model Explainability
 
@@ -158,7 +159,7 @@ python batch_predict.py
 # Processes input.csv → output.csv
 ```
 
-## 🔧 Technical Details
+## Technical Details
 
 - **Base Model:** PhayaThaiBERT (110M parameters)
 - **Dataset:** Wisesight Sentiment (21k messages)
@@ -167,7 +168,7 @@ python batch_predict.py
 - **Max Length:** 128 tokens
 - **Classes:** Positive, Neutral, Negative
 
-## 📝 Citation
+## Citation
 
 ```bibtex
 @misc{thai-sentiment-2025,
@@ -190,11 +191,11 @@ Dataset:
 }
 ```
 
-## 📄 License
+## License
 
 MIT License
 
-## 🔗 Links
+## Links
 
 - **Live Demo:** https://huggingface.co/spaces/SiemonCha/thai-sentiment-demo
 - **Model Hub:** https://huggingface.co/SiemonCha/thai-sentiment-phayabert
